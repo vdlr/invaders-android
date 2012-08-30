@@ -1,0 +1,8 @@
+<resources>
+
+    <string name="app_name">Invaders</string>
+    <string name="title_activity_invaders">Invaders</string>
+    <string name="menu_start">Start</string>
+    <string name="menu_stop">Stop</string>
+
+</resources>
