@@ -12,7 +12,7 @@ public interface IAnimatedElement {
 	
 	public PlotTime getPosition();
 
-	public IRenderer getRenderer();
+	public IElementRenderer getRenderer();
 	
 	public void changeState(ElementState state);
 	

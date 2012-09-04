@@ -2,5 +2,5 @@
     <item android:id="@+id/menu_start"
         android:title="@string/menu_start"
         android:orderInCategory="100"
-        android:showAsAction="never" />
+        />
 </menu>

@@ -8,7 +8,7 @@ import android.graphics.RectF;
 
 import com.vd.games.invaders.graphics.IAnimatedElement;
 import com.vd.games.invaders.graphics.IAnimatedElement.ElementState;
-import com.vd.games.invaders.graphics.IRenderer;
+import com.vd.games.invaders.graphics.IElementRenderer;
 
 public class Aircraft implements IAnimatedElement {
 
@@ -47,8 +47,8 @@ public class Aircraft implements IAnimatedElement {
 		return false;
 	}
 
-	public IRenderer getRenderer() {
-		return new IRenderer(){
+	public IElementRenderer getRenderer() {
+		return new IElementRenderer(){
 			public void render(Canvas canvas) {
 				Paint aircraftColor = new Paint();
 				aircraftColor.setAntiAlias(true);

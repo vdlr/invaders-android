@@ -7,7 +7,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 
 import com.vd.games.invaders.graphics.IAnimatedElement;
-import com.vd.games.invaders.graphics.IRenderer;
+import com.vd.games.invaders.graphics.IElementRenderer;
 
 public class Bullet implements IAnimatedElement {
 
@@ -35,7 +35,7 @@ public class Bullet implements IAnimatedElement {
 		int currentposty = plot.getPosy();
 		
 		//speed at basic screen 30px/10ms
-		int move = (int)((30*RESOLUTION_CONSTANT*(newtime-plot.getLasttime()))/10);	
+		int move = (int)((10*RESOLUTION_CONSTANT*(newtime-plot.getLasttime()))/10);	
 		
 		plot.setPosy(currentposty - move);
 		plot.setLastposy(currentposty);
@@ -46,9 +46,9 @@ public class Bullet implements IAnimatedElement {
 	}	
 	
 
-	public IRenderer getRenderer() {
+	public IElementRenderer getRenderer() {
 		// TODO use anonymous class, we will worry about performance later
-		return new IRenderer(){
+		return new IElementRenderer(){
 			public void render(Canvas canvas) {
 				Paint bulletColor = new Paint();
 				bulletColor.setAntiAlias(true);
