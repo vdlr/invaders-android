@@ -1,6 +1,5 @@
 package com.vd.games.invaders.model;
 
-import android.util.Log;
 
 /**
  * A place in android screen space-time 
@@ -72,7 +71,7 @@ public class PlotTime {
 
 	public boolean intersect(PlotTime position) {
 		//TODO assume linear movement by now
-		Log.d("Intersect", this.posx + "_" + this.posy + " " + position.posx + "_" + position.posy + "_" + position.lasty);
+		//Log.d("Intersect", this.posx + "_" + this.posy + " " + position.posx + "_" + position.posy + "_" + position.lasty);
 		if(position.posx > this.posx 
 				&& position.posx < (this.posx + this.width)
 				&& (this.posy + this.height) > position.posy 

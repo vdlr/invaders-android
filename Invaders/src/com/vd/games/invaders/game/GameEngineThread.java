@@ -1,4 +1,4 @@
-package com.vd.games.invaders;
+package com.vd.games.invaders.game;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -6,14 +6,13 @@ import android.os.SystemClock;
 
 class GameEngineThread extends Thread {
 
-	
 	private GameEngine gameEngine;
-	
-	private AtomicBoolean bRun = new AtomicBoolean(false); 
+
+	private AtomicBoolean bRun = new AtomicBoolean(false);
 	private AtomicBoolean bPause = new AtomicBoolean(false);
 
-	public GameEngineThread(GameEngine gameEngine) {
-		
+	protected GameEngineThread(GameEngine gameEngine) {
+
 		this.gameEngine = gameEngine;
 
 	}
@@ -24,38 +23,36 @@ class GameEngineThread extends Thread {
 		bRun.set(true);
 
 		while (bRun.get()) {
-						
 			gameEngine.timePulse(SystemClock.uptimeMillis());
-			
-			//handle pause event (activity in the background)
-			while(bPause.get()){
+
+			// handle pause event (activity move to the background)
+			while (bPause.get()) {
 				try {
-					synchronized (this) { //get object monitor
-						wait();	
-					}					
-				} catch (InterruptedException e) {}
+					synchronized (this) { // get object monitor
+						wait();
+					}
+				} catch (InterruptedException e) {
+				}
 			}
 		}
 	}
 
-
-	
-	public void pauseEvent()  {
+	protected void pauseEvent() {
 		bPause.set(true);
 	}
-	
-	public void resumeEvent() {
+
+	protected void resumeEvent() {
 		bPause.set(false);
 		synchronized (this) {
-			notifyAll();	
-		}		
+			notifyAll();
+		}
 	}
 
-	public void endRun() {
-		bPause.set(false);
+	protected void endRun() {
 		bRun.set(false);
+		bPause.set(false);
 		synchronized (this) {
-			notifyAll();	
-		}		
+			notifyAll();
+		}
 	}
 }

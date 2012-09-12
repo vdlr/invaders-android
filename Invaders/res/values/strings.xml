@@ -4,5 +4,6 @@
     <string name="title_activity_invaders">Invaders</string>
     <string name="menu_start">Start</string>
     <string name="menu_stop">Stop</string>
+    <string name="menu_exit">Exit</string>
 
 </resources>

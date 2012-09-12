@@ -1,27 +1,57 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/Invaders_layout"
+    android:id="@+id/invaders_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-    
+
     <com.vd.games.invaders.graphics.InvadersView
-      android:id="@+id/InvadersView"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"/>
+        android:id="@+id/invadersView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
-
+
         <TextView
-            android:id="@+id/TextMessage"
+            android:id="@+id/textMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:text="@string/app_name"
+            android:textSize="18sp"
             tools:context=".Invaders" />
 
+        <TextView
+            android:id="@+id/scoreView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="14dp"
+            android:text="SCORE"
+            android:textSize="25sp" />
+
+        <RelativeLayout
+            android:id="@+id/levelLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="0dp" >
+
+            <TextView
+                android:id="@+id/levelView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="-29sp"
+                android:text="LEVEL 1"
+                android:textColor="#FFFFFF"
+                android:textSize="25sp" />
+
+        </RelativeLayout>
     </RelativeLayout>
 
 </FrameLayout>
