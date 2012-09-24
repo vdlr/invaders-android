@@ -6,30 +6,29 @@ import android.os.SystemClock;
 
 import com.vd.games.invaders.graphics.IAnimatedElement;
 import com.vd.games.invaders.model.Aircraft;
-import com.vd.games.invaders.model.PlotTime;
+import com.vd.games.invaders.model.SpaceTimeCoordinate;
 
 public class GameLevel {
 
 	private int level;
 	private ArrayList<IAnimatedElement> aircrafts;
 	
-	public GameLevel () {
-		
+	public GameLevel (int level) {
+		this.level = level;
 	}
 	
 	
-	public ArrayList<IAnimatedElement> getAircrafts() {
+	public ArrayList<IAnimatedElement> getLevelAircrafts() {
 		if(aircrafts == null){
 			aircrafts = new ArrayList<IAnimatedElement>();
-			aircrafts.add(new Aircraft(new PlotTime(GameEngine.getSWidth(300), GameEngine.getSHeight(99), SystemClock
-					.uptimeMillis())));
-			aircrafts.add(new Aircraft(new PlotTime(87, 103, SystemClock
-					.uptimeMillis())));
-			aircrafts.add(new Aircraft(new PlotTime(112, 98, SystemClock
-					.uptimeMillis())));
-			aircrafts.add(new Aircraft(new PlotTime(145, 110, SystemClock
+		}
+
+		//TODO use specific GameLevel implementation for each level
+		for (int a = 0; a < 1 + (level * 4); a++) {
+			aircrafts.add(new Aircraft(new SpaceTimeCoordinate(87 + (a%5 * 43), 80 + (a%3 * 31), SystemClock
 					.uptimeMillis())));
 		}
+	
 		return aircrafts;
 	}
 

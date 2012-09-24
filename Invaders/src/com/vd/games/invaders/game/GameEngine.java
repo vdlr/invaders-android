@@ -22,11 +22,11 @@ import com.vd.games.invaders.graphics.IAnimatedElement;
 import com.vd.games.invaders.graphics.IAnimatedElement.ElementState;
 import com.vd.games.invaders.graphics.InvadersView;
 import com.vd.games.invaders.model.Bullet;
-import com.vd.games.invaders.model.PlotTime;
+import com.vd.games.invaders.model.SpaceTimeCoordinate;
 
 /**
- * This object is responsible to handle elements in the game space-time The main
- * feature of this game is his real time behavior, that is, elements will move
+ * This object is responsible to handle elements in the game space-time. The main
+ * feature of this game is his real-time behavior, that is, elements will move
  * at a real velocity independently of device cpu speed. That will cause fast
  * elements (like bullets) will be impressed at the screen only a few times
  * (depends on device cpu speed) before they get out.
@@ -39,30 +39,30 @@ public class GameEngine extends Observable {
 	/** device resolution */
 	private static final int STANDARD_SCREEN_WIDTH = 600;
 	private static int screenProportion = STANDARD_SCREEN_WIDTH;
-	
+
 	/** surface change events */
 	public SurfaceCallback surfaceCallback;
 	/** responsible to draw main view contents */
 	private InvadersView mainView;
 	/** game loop thread */
 	private GameEngineThread gameThread;
-	
+
 	/** device services */
 	private Vibrator vibrator;
 	private SoundPool soundPool;
 	private AudioManager audioManager;
-	
-	
+
 	/**
 	 * aircraft list is handle only by gamethreas (timepulse) and should not be
 	 * thread-safe
 	 */
 	private List<IAnimatedElement> aircrafts;
-	
+
 	/**
 	 * Used to notify observers
+	 * 
 	 * @author Victor de la Rosa
-	 *
+	 * 
 	 */
 	public enum GameEventType {
 		FINISH_LEVEL, START_GAME, EXIT_GAME, PAUSE_GAME, RESUME_GAME
@@ -80,7 +80,6 @@ public class GameEngine extends Observable {
 	private boolean gameThreadRunning;
 
 	private long lastTimePulse;
-	
 
 	public enum ActionType {
 		SHOT
@@ -88,9 +87,9 @@ public class GameEngine extends Observable {
 
 	public GameEngine() {
 		gameThreadRunning = false;
-		surfaceCallback = new SurfaceCallback();	
+		surfaceCallback = new SurfaceCallback();
 		soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
-				
+
 	}
 
 	protected void start() {
@@ -105,7 +104,7 @@ public class GameEngine extends Observable {
 		gameThread.start();
 		// enable events treatment
 		gameThreadRunning = true;
-				
+
 	}
 
 	protected void stop() {
@@ -116,14 +115,14 @@ public class GameEngine extends Observable {
 
 	}
 
-	protected void pause() {		
+	protected void pause() {
 		if (gameThread != null) {
-			gameThread.pauseEvent();			
+			gameThread.pauseEvent();
 		}
 		gameThreadRunning = false;
 	}
 
-	protected void resume() {		
+	protected void resume() {
 		if (gameThread != null) {
 			gameThread.resumeEvent();
 			gameThreadRunning = true;
@@ -131,7 +130,8 @@ public class GameEngine extends Observable {
 	}
 
 	/**
-	 * Called at least one when view is created(changed), only portrait orientation allowed
+	 * Called at least one when view is created(changed), only portrait
+	 * orientation allowed
 	 * 
 	 * @param screenWidth
 	 * @param screenHeight
@@ -140,7 +140,7 @@ public class GameEngine extends Observable {
 		if (gameThread != null)
 			gameThread.pauseEvent();
 		screenProportion = screenWidth * 100 / STANDARD_SCREEN_WIDTH;
-		mainView.changeScale(screenWidth, screenHeight);		
+		mainView.changeScale(screenWidth, screenHeight);
 		if (gameThread != null)
 			gameThread.resumeEvent();
 	}
@@ -154,22 +154,22 @@ public class GameEngine extends Observable {
 	 */
 	public boolean actionEvent(ActionType type, MotionEvent event) {
 		if (!gameThreadRunning) {
-			return false; //don't worry about next touch events
+			return false; // don't worry about next touch events
 		}
 
 		int action = event.getActionMasked();
 		int pointerIndex = event.getActionIndex();
 
-		PlotTime plot = null;
+		SpaceTimeCoordinate plot = null;
 		switch (action) {
 		case MotionEvent.ACTION_DOWN:
 		case MotionEvent.ACTION_POINTER_DOWN:
-			plot = new PlotTime((int) event.getX(pointerIndex),
+			plot = new SpaceTimeCoordinate((int) event.getX(pointerIndex),
 					(int) event.getY(pointerIndex), event.getEventTime());
 			break;
 		case MotionEvent.ACTION_UP:
 		case MotionEvent.ACTION_MOVE:
-		case MotionEvent.ACTION_CANCEL:		
+		case MotionEvent.ACTION_CANCEL:
 		default:
 			break;
 		}
@@ -187,21 +187,25 @@ public class GameEngine extends Observable {
 	}
 
 	/**
-	 * Represent time step. Animate or remove each visible element This method
-	 * is called by gameThread and operations inside should be thread-safe
+	 * Represent time step, carrying out animation or removing each visible
+	 * element. This method is called by gameThread and operations inside should
+	 * be thread-safe
 	 */
 	public void timePulse(long newtime) {
 
-		// space will be update every 100ms
-		int MIN_INSTANCE = 100; // ms
+		// space will be update every 
+		int MIN_INSTANCE = 50; // ms
 		if (newtime - lastTimePulse < MIN_INSTANCE) {
 			return;
 		}
+		// get new bullets (touch events)
+		//TODO use bullets pool to avoid create new elements
 		IAnimatedElement bullet;
 		while ((bullet = newBulletsQueue.poll()) != null) {
 			bullets.add(bullet);
-		}		
+		}
 
+		//animate bullets
 		Iterator<IAnimatedElement> iterator = bullets.iterator();
 		while (iterator.hasNext()) {
 			IAnimatedElement el = iterator.next();
@@ -210,6 +214,7 @@ public class GameEngine extends Observable {
 			}
 		}
 
+		//animate alien aircrafts
 		Iterator<IAnimatedElement> aircraftIterator = aircrafts.iterator();
 		while (aircraftIterator.hasNext()) {
 			IAnimatedElement aircraftElement = aircraftIterator.next();
@@ -223,19 +228,23 @@ public class GameEngine extends Observable {
 						&& aircraftElement.getPosition().intersect(
 								bulletElement.getPosition())) {
 					aircraftElement.changeState(ElementState.DIYNG);
-					if(vibrator!=null)
+					if (vibrator != null)
 						vibrator.vibrate(50);
 					bulletIterator.remove(); // remove bullet
 				}
 			}
-		}
-				
-		if(aircrafts.isEmpty()){
+		}		
+		
+		//notify level completed
+		if (aircrafts.isEmpty()) {
 			setChanged();
 			notifyObservers(GameEventType.FINISH_LEVEL);
 		}
-		// finally render elements
+		
+		// render elements
 		mainView.renderElements(getElements());
+		
+
 	}
 
 	public List<IAnimatedElement> getElements() {
@@ -245,22 +254,25 @@ public class GameEngine extends Observable {
 
 		return elements;
 	}
-	
+
 	public void setArmy(ArrayList<IAnimatedElement> aircrafts2) {
 		this.aircrafts = aircrafts2;
-		
+
 	}
 
 	/**
-	 * Should be set by gameThread thread (ontimepulse), that way dont require to be thread safe
+	 * Should be set by gameThread thread (ontimepulse), that way dont require
+	 * to be thread safe
+	 * 
 	 * @param bullets2
 	 */
-	public void initsBullets() {		
+	public void initsBullets() {
 		this.bullets = new ArrayList<IAnimatedElement>();
-		if(newBulletsQueue==null){
+		if (newBulletsQueue == null) {
 			newBulletsQueue = new LinkedList<IAnimatedElement>();
 		}
-		while(newBulletsQueue.poll()!=null);		
+		while (newBulletsQueue.poll() != null)
+			;
 	}
 
 	public void setView(InvadersView invadersView) {
@@ -268,16 +280,16 @@ public class GameEngine extends Observable {
 
 	}
 
-	
-	
-	private void createBullet(PlotTime plot) {
+	/**
+	 * Add new bullets to queue to avoid blocks between main thread (touches) and game thread.
+	 * @param plot
+	 */
+	private void createBullet(SpaceTimeCoordinate plot) {
 		newBulletsQueue.offer(new Bullet(plot));
-		long [] pattern = {0, 15L, 15L, 15L};
-		if(vibrator!=null)			
+		long[] pattern = { 0, 15L, 15L, 15L };
+		if (vibrator != null)
 			vibrator.vibrate(pattern, -1);
 	}
-
-	
 
 	public Vibrator getVibrator() {
 		return vibrator;
@@ -317,8 +329,13 @@ public class GameEngine extends Observable {
 				return false;
 			}
 			// assume main view touched
-			return actionEvent(ActionType.SHOT, event);
-
+			boolean bHandled = actionEvent(ActionType.SHOT, event);
+			try {
+				Thread.sleep(16);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return bHandled;
 		}
 	}
 
@@ -332,13 +349,12 @@ public class GameEngine extends Observable {
 
 	/**
 	 * Use for any object created or movement calculation
+	 * 
 	 * @return screen proportion in %
 	 */
 	public static int getScreenProportion() {
-		
+
 		return screenProportion;
 	}
-
-
 
 }

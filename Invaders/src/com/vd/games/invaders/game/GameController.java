@@ -113,7 +113,7 @@ public class GameController implements Observer {
 
 	private void setLevelElements() {
 		GameLevel gameLevel = levelFactory.getLevel(level);
-		gameEngine.setArmy(gameLevel.getAircrafts());
+		gameEngine.setArmy(gameLevel.getLevelAircrafts());
 		gameEngine.initsBullets();
 
 	}

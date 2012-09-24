@@ -17,7 +17,7 @@ public class Bullet implements IAnimatedElement {
 		RESOLUTION_CONSTANT = proportionalConstant;
 	}
 	
-	private PlotTime plot;
+	private SpaceTimeCoordinate plot;
 	private long bulletID;
 
 
@@ -25,7 +25,7 @@ public class Bullet implements IAnimatedElement {
 	 * Bullets has a initial posx and an own velocity
 	 * @param posx
 	 */
-	public Bullet(PlotTime plot) {
+	public Bullet(SpaceTimeCoordinate plot) {
 		this.plot = plot;
 		this.bulletID = plot.getLasttime();
 	}
@@ -74,7 +74,7 @@ public class Bullet implements IAnimatedElement {
 		
 	}
 
-	public PlotTime getPosition() {
+	public SpaceTimeCoordinate getPosition() {
 		return this.plot;
 	}
 

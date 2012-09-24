@@ -2,7 +2,7 @@ package com.vd.games.invaders.graphics;
 
 import java.util.ArrayList;
 
-import com.vd.games.invaders.model.PlotTime;
+import com.vd.games.invaders.model.SpaceTimeCoordinate;
 
 public interface IAnimatedElement {
 
@@ -10,7 +10,7 @@ public interface IAnimatedElement {
 	
 	public ArrayList<IAnimatedElement> getElements();
 	
-	public PlotTime getPosition();
+	public SpaceTimeCoordinate getPosition();
 
 	public IElementRenderer getRenderer();
 	

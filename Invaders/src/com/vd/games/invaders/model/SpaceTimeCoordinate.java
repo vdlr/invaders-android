@@ -7,7 +7,7 @@ package com.vd.games.invaders.model;
  * @author Victor de la Rosa
  *
  */
-public class PlotTime {
+public class SpaceTimeCoordinate {
 
 	private int posx;
 	private int posy;
@@ -17,7 +17,7 @@ public class PlotTime {
 	private int lastx;
 	private int lasty;
 	
-	public PlotTime(int posx, int posy, long lasttime) {
+	public SpaceTimeCoordinate(int posx, int posy, long lasttime) {
 		this.setPosx(posx);
 		this.setPosy(posy);
 		this.width = 1;
@@ -25,7 +25,7 @@ public class PlotTime {
 		this.setLasttime(lasttime);		
 	}
 	
-	public PlotTime(int posx, int posy, int width, int height, int lasttime) {
+	public SpaceTimeCoordinate(int posx, int posy, int width, int height, int lasttime) {
 		this.setPosx(posx);
 		this.setPosy(posy);
 		this.width = width;
@@ -69,9 +69,14 @@ public class PlotTime {
 		this.lasttime = lasttime;			
 	}
 
-	public boolean intersect(PlotTime position) {
-		//TODO assume linear movement by now
-		//Log.d("Intersect", this.posx + "_" + this.posy + " " + position.posx + "_" + position.posy + "_" + position.lasty);
+	/**
+	 * It should evaluate if two elements has been at the same place since last position.
+	 * @param position
+	 * @return
+	 */
+	public boolean intersect(SpaceTimeCoordinate position) {
+		//TODO assume more complex border elements		
+		//assume bullets vertical movement
 		if(position.posx > this.posx 
 				&& position.posx < (this.posx + this.width)
 				&& (this.posy + this.height) > position.posy 

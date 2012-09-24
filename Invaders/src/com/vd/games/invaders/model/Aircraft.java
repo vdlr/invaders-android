@@ -12,7 +12,7 @@ import com.vd.games.invaders.graphics.IElementRenderer;
 
 public class Aircraft implements IAnimatedElement {
 
-	private PlotTime plot;
+	private SpaceTimeCoordinate plot;
 	private int[] movx = {-1,0,+1,0};
 	private int[] movy = {0,-1,0,+1};
 	private int[] dyingmovy = {-1,-2,-3,-4};
@@ -20,7 +20,7 @@ public class Aircraft implements IAnimatedElement {
 	private ElementState state;
 	
 	
-	public Aircraft(PlotTime plot) {
+	public Aircraft(SpaceTimeCoordinate plot) {
 		this.plot = plot;
 		this.plot.setWidth(12);
 		this.plot.setHeight(12);
@@ -74,7 +74,7 @@ public class Aircraft implements IAnimatedElement {
 		
 	}
 
-	public PlotTime getPosition() {
+	public SpaceTimeCoordinate getPosition() {
 		return this.plot;
 	}
 
